@@ -2,6 +2,7 @@ package learn_goroutine
 
 import (
 	"fmt"
+	"runtime"
 	"strconv"
 	"testing"
 	"time"
@@ -89,9 +90,21 @@ func TestBufferedChannel(t *testing.T) {
 		channel <- "Adiva"
 		channel <- "Nursuandy"
 		channel <- "Ritonga"
+		channel <- "Judy"
+		channel <- "Helen"
+		channel <- "Richard"
+		channel <- "Juan"
+		channel <- "Rosita"
+		channel <- "Igris"
 	}()
 
 	go func() {
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
+		fmt.Println(<-channel)
 		fmt.Println(<-channel)
 		fmt.Println(<-channel)
 		fmt.Println(<-channel)
@@ -180,4 +193,25 @@ func TestDefaultChannel(t *testing.T) {
 		}
 	}
 
+}
+
+
+func TestBuffer(t *testing.T) {
+	runtime.GOMAXPROCS(2)
+
+	messages := make(chan int, 3)
+
+    go func() {
+        for {
+            i := <-messages
+            fmt.Println("receive data", i)
+        }
+    }()
+
+    for i := 0; i < 9; i++ {
+        fmt.Println("send data", i)
+        messages <- i
+    }
+
+    time.Sleep(1 * time.Second)
 }
